@@ -1,5 +1,7 @@
 FROM python:3-alpine
+MAINTAINER bindreturn <bindreturn@protonmail.ch>
 
-RUN pip install discoecs
+RUN    pip install discoecs
+VOLUME [ "/sd" ]
+CMD    [ "discoecs", "-v", "-f /sd/ecs-targets.json" ]
 
-CMD discoecs -v -f /var/sd/ecs-targets.json
