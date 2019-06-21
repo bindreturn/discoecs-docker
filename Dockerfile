@@ -3,5 +3,5 @@ MAINTAINER bindreturn <bindreturn@protonmail.ch>
 
 RUN    pip install discoecs
 VOLUME [ "/sd" ]
-CMD    [ "discoecs", "-v", "-f /sd/ecs-targets.json" ]
+CMD    [ "discoecs", "-v", "-f/sd/ecs-targets.json" ]
 
