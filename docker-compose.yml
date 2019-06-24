@@ -1,0 +1,31 @@
+version: '3.3'
+
+networks:
+  prometheus:
+
+services:
+  ecs-autodiscovery:
+    image: bindreturn/discoecs
+    environment:
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - DEFAULT_METRICS_PORT=${DEFAULT_METRICS_PORT}
+    volumes:
+      - ${CONFIG_DIR}/prometheus/sd/:/sd/
+
+  prometheus-server:
+    image: prom/prometheus
+    networks:
+      - prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ${CONFIG_DIR}/prometheus/prometheus.yml:/etc/prometheus.yml
+      - ${CONFIG_DIR}/prometheus/alert-rules.yml:/etc/alert-rules.yml
+      - ${CONFIG_DIR}/prometheus/sd/:/sd/
+      - ${DATA_DIR}/prometheus/prometheus:/prometheus
+    command:
+      - '--config.file=/etc/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.external-url=${EXTERNAL_URL}'
